@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./assets/fonts/Starjhol.ttf";
@@ -10,33 +8,30 @@ import "./App.css";
 
 import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
-import TableNav from "./components/TableNav";
+import DataPagination from "./components/DataPagination";
 
 function App() {
+	const [data, setData] = useState();
+
+	useEffect(() => {
+		axios
+			.get("https://swapi.dev/api/people/")
+			.then((response) => {
+				setData(response.data.results);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
+
+	console.log(data);
+
 	return (
 		<div className="App">
-			<Container>
-				<Row>
-					<Col>
-						<h1>Star Wars Database</h1>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<SearchBar />
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<DataTable />
-					</Col>
-				</Row>
-				<Row className="ms-auto">
-					<Col>
-						<TableNav />
-					</Col>
-				</Row>
-			</Container>
+			<h1>Star Wars Database</h1>
+			<SearchBar />
+			{/* <DataTable chars={data} /> */}
+			<DataPagination />
 		</div>
 	);
 }
