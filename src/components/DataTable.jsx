@@ -4,7 +4,7 @@ import Table from "react-bootstrap/Table";
 export default function DataTable(props) {
 	const charElements = Object.values(props.chars).map((char) => {
 		return (
-			<tr>
+			<tr key={char.key}>
 				<td>{char.name}</td>
 				<td>{char.birth}</td>
 				<td>{char.height}</td>
