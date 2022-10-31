@@ -6,7 +6,7 @@ export default function DataTable(props) {
 		return (
 			<tr key={char.key}>
 				<td>{char.name}</td>
-				<td>{char.birth}</td>
+				<td>{char.birth_year}</td>
 				<td>{char.height}</td>
 				<td>{char.mass}</td>
 				<td>{char.homeworld}</td>

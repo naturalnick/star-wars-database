@@ -21,12 +21,9 @@ h1 {
 
 .table {
 	background-color: white;
+	margin-top: 15px;
 }
 
-.form-container {
-	margin: 10px 0;
-}
-
-.centered {
-	margin: auto;
+.page-btn {
+	width: 150px;
 }

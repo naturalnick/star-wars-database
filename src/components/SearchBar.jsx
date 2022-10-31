@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -9,23 +9,32 @@ import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SearchBar(props) {
+	const [input, setInput] = useState("");
+
+	function handleChange(event) {
+		setInput(event.target.value);
+	}
 	return (
 		<Container className="form-container">
 			<Form>
 				<Row>
-					<Col sm={8}>
+					<Col xs={8}>
 						<Form.Control
 							type="search"
 							placeholder="Search"
 							aria-label="Search"
+							onChange={handleChange}
 						/>
 					</Col>
-					<Col className="d-grid">
-						<Button onClick={props.handleSearch} variant="warning">
+					<Col xs={2} className="d-grid">
+						<Button
+							onClick={() => props.handleSearch(input)}
+							variant="warning"
+						>
 							Search
 						</Button>
 					</Col>
-					<Col className="d-grid">
+					<Col xs={2} className="d-grid">
 						<Button onClick={props.handleCancel} variant="secondary">
 							Cancel
 						</Button>
