@@ -56,20 +56,18 @@ function App() {
 		let pageCount = 1;
 		let atTheEnd = false;
 		try {
-			do {
-				pageCount++;
-			} while (!atTheEnd);
-			{
+			while (!atTheEnd) {
 				const res1 = await axios.get(
 					`https://swapi.dev/api/people/?page=${pageCount}`
 				);
 				atTheEnd = res1.data.next === null ? true : false;
+				pageCount++;
 			}
 		} catch (error) {
 			console.log(error);
 		}
 		setPage((prevPage) => {
-			return { ...prevPage, total: pageCount };
+			return { ...prevPage, total: pageCount - 1 };
 		});
 	}
 
@@ -78,11 +76,11 @@ function App() {
 		try {
 			const buttonText = event.target.textContent;
 			let newActive;
-			if (buttonText.isNaN) {
+			if (!Number(buttonText)) {
 				newActive =
 					buttonText === "Next" ? page.active + 1 : page.active - 1;
 			} else {
-				newActive = buttonText;
+				newActive = Number(buttonText);
 			}
 			const res1 = await axios.get(
 				`https://swapi.dev/api/people/?page=${newActive}`
@@ -111,15 +109,23 @@ function App() {
 	function handleChange(input) {
 		console.log("handlechange");
 		if (input === "") {
-			setIsSearching(false);
-			setIsLoading(true);
-			getData(page.url + page.active);
+			cancelSearch();
 		} else {
-			const url = `https://swapi.dev/api/people/?search=${input}`;
-			setIsSearching(true);
-			getData(url);
+			performSearch(input);
 		}
 		setInput(input);
+	}
+
+	function cancelSearch() {
+		setIsSearching(false);
+		setIsLoading(true);
+		getData(page.url + page.active);
+	}
+
+	function performSearch(text) {
+		const url = `https://swapi.dev/api/people/?search=${text}`;
+		setIsSearching(true);
+		getData(url);
 	}
 
 	useEffect(() => {
@@ -131,7 +137,7 @@ function App() {
 		getPageInfo();
 	}, []);
 
-	console.log("loaded");
+	console.log(page);
 
 	return (
 		<div className="App">

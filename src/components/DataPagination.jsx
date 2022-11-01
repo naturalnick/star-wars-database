@@ -9,6 +9,7 @@ export default function DataPagination(props) {
 				key={number}
 				active={number === props.page.active}
 				onClick={(event) => props.handlePageTurn(event)}
+				variant="light"
 			>
 				{number}
 			</Button>
@@ -22,7 +23,7 @@ export default function DataPagination(props) {
 					disabled={
 						props.page.isFirst || props.isLoading || props.isSearching
 					}
-					variant="light"
+					variant="warning"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
 					Previous
@@ -33,7 +34,7 @@ export default function DataPagination(props) {
 					disabled={
 						props.page.isLast || props.isLoading || props.isSearching
 					}
-					variant="light"
+					variant="warning"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
 					Next
