@@ -9,8 +9,6 @@ import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import DataPagination from "./components/DataPagination";
 
-//TODO add page numbers
-
 function App() {
 	const [data, setData] = useState({});
 
