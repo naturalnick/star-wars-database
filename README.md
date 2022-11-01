@@ -2,7 +2,7 @@
 
 <br>
 
-_A web app that pulls Star Wars character data from (SWAPI)[https://swapi.dev] (Star Wars API) and presents it using React and Bootstrap components._
+_A web app that pulls Star Wars character data from [SWAPI](https://swapi.dev) (Star Wars API) and presents it using React and Bootstrap components._
 
 <br>
 
