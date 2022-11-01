@@ -9,6 +9,8 @@ import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import DataPagination from "./components/DataPagination";
 
+//TODO add page numbers
+
 function App() {
 	const [data, setData] = useState({});
 
@@ -65,6 +67,7 @@ function App() {
 					isLast: res1.data.next === null ? true : false,
 				};
 			});
+			setIsLoading(true);
 		} catch (error) {
 			console.log(error);
 		}
@@ -72,19 +75,23 @@ function App() {
 
 	const [isSearching, setIsSearching] = useState(false);
 
-	function handleSearch(input) {
-		if (!isSearching) {
+	const [isLoading, setIsLoading] = useState(true);
+
+	const [input, setInput] = useState("");
+
+	function handleChange(input) {
+		if (input === "") {
+			setIsSearching(false);
+			setIsLoading(true);
+			getData(page.url + page.active);
+		} else {
 			console.log("handleSearch");
 			const url = `https://swapi.dev/api/people/?search=${input}`;
 			setIsSearching(true);
 			getData(url);
-		} else {
-			setIsSearching(false);
-			getData(page.url + page.active);
 		}
+		setInput(input);
 	}
-
-	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		console.log("useEffect");
@@ -94,7 +101,7 @@ function App() {
 	return (
 		<div className="App">
 			<h1>Star Wars Database</h1>
-			<SearchBar handleSearch={handleSearch} />
+			<SearchBar handleChange={handleChange} isLoading={isLoading} />
 			<DataTable chars={data} isLoading={isLoading} />
 			<DataPagination
 				isSearching={isSearching}

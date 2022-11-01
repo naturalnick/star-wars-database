@@ -24,18 +24,20 @@ export default function DataTable(props) {
 	);
 
 	return (
-		<Table className="table" striped hover>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Birth Year</th>
-					<th>Height</th>
-					<th>Mass</th>
-					<th>Homeworld</th>
-					<th>Species</th>
-				</tr>
-			</thead>
-			<tbody>{charElements}</tbody>
-		</Table>
+		<div className="table-container">
+			<Table className="table" striped hover>
+				<thead>
+					<tr>
+						<th width="25%">Name</th>
+						<th width="15%">Birth Year</th>
+						<th width="15%">Height</th>
+						<th width="15%">Mass</th>
+						<th width="15%">Homeworld</th>
+						<th width="15%">Species</th>
+					</tr>
+				</thead>
+				<tbody>{charElements}</tbody>
+			</Table>
+		</div>
 	);
 }

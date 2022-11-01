@@ -1,7 +1,8 @@
 .App {
 	text-align: center;
 	background-color: black;
-	width: 900px;
+	width: 90%;
+	max-width: 800px;
 	height: auto;
 	margin: auto;
 	margin-top: 20px;
@@ -19,6 +20,11 @@ h1 {
 	color: #ffe81f;
 }
 
+.search-bar {
+	width: 50%;
+	margin: auto;
+}
+
 .table {
 	background-color: white;
 	margin-top: 15px;
@@ -28,6 +34,10 @@ h1 {
 .table th,
 .table td {
 	padding-left: 15px;
+}
+
+.table-container {
+	overflow-x: auto;
 }
 
 .data-placeholder {
