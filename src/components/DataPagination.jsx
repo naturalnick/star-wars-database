@@ -3,11 +3,17 @@ import Button from "react-bootstrap/Button";
 
 export default function DataPagination(props) {
 	let items = [];
-	for (let number = 1; number <= props.page.total; number++) {
+	for (let number = 1; number <= props.pageTotal; number++) {
 		items.push(
 			<Button
+				className="page-btn-inner"
 				key={number}
 				active={number === props.page.active}
+				disabled={
+					number === props.page.active ||
+					props.isLoading ||
+					props.isSearching
+				}
 				onClick={(event) => props.handlePageTurn(event)}
 				variant="light"
 			>
@@ -23,7 +29,7 @@ export default function DataPagination(props) {
 					disabled={
 						props.page.isFirst || props.isLoading || props.isSearching
 					}
-					variant="warning"
+					variant="light"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
 					Previous
@@ -34,7 +40,7 @@ export default function DataPagination(props) {
 					disabled={
 						props.page.isLast || props.isLoading || props.isSearching
 					}
-					variant="warning"
+					variant="light"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
 					Next

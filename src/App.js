@@ -15,7 +15,6 @@ function App() {
 	const [data, setData] = useState({});
 
 	async function getData(url) {
-		console.log("getData");
 		try {
 			const response = await axios.get(url);
 			const data = response.data.results;
@@ -51,8 +50,9 @@ function App() {
 		isLast: false,
 	});
 
+	const [pageTotal, setPageTotal] = useState(0);
+
 	async function getPageInfo() {
-		console.log("getpageinfo");
 		let pageCount = 1;
 		let atTheEnd = false;
 		try {
@@ -66,13 +66,14 @@ function App() {
 		} catch (error) {
 			console.log(error);
 		}
-		setPage((prevPage) => {
-			return { ...prevPage, total: pageCount - 1 };
-		});
+		setPageTotal(pageCount - 1);
 	}
 
+	useEffect(() => {
+		getPageInfo();
+	}, []);
+
 	async function handlePageTurn(event) {
-		console.log("handlePageTurn");
 		try {
 			const buttonText = event.target.textContent;
 			let newActive;
@@ -100,14 +101,9 @@ function App() {
 		}
 	}
 
-	const [isSearching, setIsSearching] = useState(false);
-
-	const [isLoading, setIsLoading] = useState(true);
-
 	const [input, setInput] = useState("");
 
 	function handleChange(input) {
-		console.log("handlechange");
 		if (input === "") {
 			cancelSearch();
 		} else {
@@ -115,6 +111,10 @@ function App() {
 		}
 		setInput(input);
 	}
+
+	const [isSearching, setIsSearching] = useState(false);
+
+	const [isLoading, setIsLoading] = useState(true);
 
 	function cancelSearch() {
 		setIsSearching(false);
@@ -129,15 +129,10 @@ function App() {
 	}
 
 	useEffect(() => {
-		console.log("useEffect");
 		getData(page.url + page.active);
 	}, [page]);
 
-	useEffect(() => {
-		getPageInfo();
-	}, []);
-
-	console.log(page);
+	console.log("render");
 
 	return (
 		<div className="App">
@@ -153,6 +148,7 @@ function App() {
 				isLoading={isLoading}
 				handlePageTurn={handlePageTurn}
 				page={page}
+				pageTotal={pageTotal}
 			/>
 		</div>
 	);

@@ -30,8 +30,8 @@ export default function DataTable(props) {
 					<tr>
 						<th width="25%">Name</th>
 						<th width="15%">Birth Year</th>
-						<th width="15%">Height</th>
-						<th width="15%">Mass</th>
+						<th width="15%">Height (cm)</th>
+						<th width="15%">Mass (kg)</th>
 						<th width="15%">Homeworld</th>
 						<th width="15%">Species</th>
 					</tr>
