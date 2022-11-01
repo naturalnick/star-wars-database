@@ -51,11 +51,39 @@ function App() {
 		isLast: false,
 	});
 
+	async function getPageInfo() {
+		console.log("getpageinfo");
+		let pageCount = 1;
+		let atTheEnd = false;
+		try {
+			do {
+				pageCount++;
+			} while (!atTheEnd);
+			{
+				const res1 = await axios.get(
+					`https://swapi.dev/api/people/?page=${pageCount}`
+				);
+				atTheEnd = res1.data.next === null ? true : false;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+		setPage((prevPage) => {
+			return { ...prevPage, total: pageCount };
+		});
+	}
+
 	async function handlePageTurn(event) {
+		console.log("handlePageTurn");
 		try {
 			const buttonText = event.target.textContent;
-			const newActive =
-				buttonText === "Next" ? page.active + 1 : page.active - 1;
+			let newActive;
+			if (buttonText.isNaN) {
+				newActive =
+					buttonText === "Next" ? page.active + 1 : page.active - 1;
+			} else {
+				newActive = buttonText;
+			}
 			const res1 = await axios.get(
 				`https://swapi.dev/api/people/?page=${newActive}`
 			);
@@ -67,6 +95,7 @@ function App() {
 					isLast: res1.data.next === null ? true : false,
 				};
 			});
+
 			setIsLoading(true);
 		} catch (error) {
 			console.log(error);
@@ -80,12 +109,12 @@ function App() {
 	const [input, setInput] = useState("");
 
 	function handleChange(input) {
+		console.log("handlechange");
 		if (input === "") {
 			setIsSearching(false);
 			setIsLoading(true);
 			getData(page.url + page.active);
 		} else {
-			console.log("handleSearch");
 			const url = `https://swapi.dev/api/people/?search=${input}`;
 			setIsSearching(true);
 			getData(url);
@@ -98,10 +127,20 @@ function App() {
 		getData(page.url + page.active);
 	}, [page]);
 
+	useEffect(() => {
+		getPageInfo();
+	}, []);
+
+	console.log("loaded");
+
 	return (
 		<div className="App">
 			<h1>Star Wars Database</h1>
-			<SearchBar handleChange={handleChange} isLoading={isLoading} />
+			<SearchBar
+				value={input}
+				handleChange={handleChange}
+				isLoading={isLoading}
+			/>
 			<DataTable chars={data} isLoading={isLoading} />
 			<DataPagination
 				isSearching={isSearching}

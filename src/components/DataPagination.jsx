@@ -2,19 +2,18 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 
 export default function DataPagination(props) {
-	//to populate pagination numbers // change to buttons
-	// let items = [];
-	// for (let number = 1; number <= props.pages.total; number++) {
-	// 	items.push(
-	// 		<Pagination.Item
-	// 			key={number}
-	// 			active={number === props.pages.active}
-	// 			onClick={(event) => props.handlePageTurn(event)}
-	// 		>
-	// 			{number}
-	// 		</Pagination.Item>
-	// 	);
-	// }
+	let items = [];
+	for (let number = 1; number <= props.page.total; number++) {
+		items.push(
+			<Button
+				key={number}
+				active={number === props.page.active}
+				onClick={(event) => props.handlePageTurn(event)}
+			>
+				{number}
+			</Button>
+		);
+	}
 	return (
 		<div>
 			<ButtonGroup aria-label="pagination">
@@ -28,6 +27,7 @@ export default function DataPagination(props) {
 				>
 					Previous
 				</Button>
+				{items}
 				<Button
 					className="page-btn"
 					disabled={
