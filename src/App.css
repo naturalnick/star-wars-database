@@ -2,11 +2,11 @@
 	text-align: center;
 	background-color: black;
 	width: 900px;
-	height: 800px;
+	height: auto;
 	margin: auto;
 	margin-top: 20px;
-	padding: 10px 30px;
-	border-radius: 80px;
+	padding: 20px 30px;
+	border-radius: 30px;
 	background: black url("./assets/images/galaxy.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -28,6 +28,12 @@ h1 {
 .table th,
 .table td {
 	padding-left: 15px;
+}
+
+.data-placeholder {
+	height: 410px;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .page-btn {

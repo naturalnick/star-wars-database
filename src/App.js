@@ -36,6 +36,7 @@ function App() {
 				})
 			);
 			setData(characters);
+			setIsLoading(false);
 		} catch (error) {
 			console.log(error);
 		}
@@ -83,6 +84,8 @@ function App() {
 		}
 	}
 
+	const [isLoading, setIsLoading] = useState(true);
+
 	useEffect(() => {
 		console.log("useEffect");
 		getData(page.url + page.active);
@@ -92,9 +95,10 @@ function App() {
 		<div className="App">
 			<h1>Star Wars Database</h1>
 			<SearchBar handleSearch={handleSearch} />
-			<DataTable chars={data} />
+			<DataTable chars={data} isLoading={isLoading} />
 			<DataPagination
-				disabled={isSearching}
+				isSearching={isSearching}
+				isLoading={isLoading}
 				handlePageTurn={handlePageTurn}
 				page={page}
 			/>

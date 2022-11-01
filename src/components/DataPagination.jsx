@@ -20,7 +20,9 @@ export default function DataPagination(props) {
 			<ButtonGroup aria-label="pagination">
 				<Button
 					className="page-btn"
-					disabled={props.page.isFirst || props.disabled}
+					disabled={
+						props.page.isFirst || props.isLoading || props.isSearching
+					}
 					variant="light"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
@@ -28,7 +30,9 @@ export default function DataPagination(props) {
 				</Button>
 				<Button
 					className="page-btn"
-					disabled={props.page.isLast || props.disabled}
+					disabled={
+						props.page.isLast || props.isLoading || props.isSearching
+					}
 					variant="light"
 					onClick={(event) => props.handlePageTurn(event)}
 				>
