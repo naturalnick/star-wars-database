@@ -51,6 +51,9 @@ h1 {
 }
 
 @media only screen and (max-width: 740px) {
+	.page-btn {
+		width: 100px;
+	}
 	.page-btn-inner {
 		display: none;
 	}

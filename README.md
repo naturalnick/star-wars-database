@@ -11,7 +11,7 @@ See it in action [here](https://nicks-star-wars-data-app.herokuapp.com).
 <br>
 
 Screenshot:<br>
-<img src="src/assets/screenshot.png" width="75%">
+<img src="src/assets/screenshot.png" width="85%">
 
 ## Summary
 
