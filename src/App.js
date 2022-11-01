@@ -53,7 +53,6 @@ function App() {
 			const buttonText = event.target.textContent;
 			const newActive =
 				buttonText === "Next" ? page.active + 1 : page.active - 1;
-			console.log("New active: " + newActive);
 			const res1 = await axios.get(
 				`https://swapi.dev/api/people/?page=${newActive}`
 			);
@@ -79,6 +78,8 @@ function App() {
 			setIsSearching(true);
 			getData(url);
 		} else {
+			setIsSearching(false);
+			getData(page.url + page.active);
 		}
 	}
 

@@ -22,8 +22,19 @@ h1 {
 .table {
 	background-color: white;
 	margin-top: 15px;
+	text-align: left;
+}
+
+.table th,
+.table td {
+	padding-left: 15px;
 }
 
 .page-btn {
 	width: 150px;
+}
+
+.search-button {
+	background-color: #ffe81f;
+	border-color: lightgray;
 }

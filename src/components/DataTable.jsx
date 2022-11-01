@@ -16,7 +16,7 @@ export default function DataTable(props) {
 	});
 
 	return (
-		<Table className="table" striped bordered hover>
+		<Table className="table" striped hover>
 			<thead>
 				<tr>
 					<th>Name</th>
