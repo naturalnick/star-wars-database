@@ -1,0 +1,14 @@
+.search-bar {
+	width: 75%;
+	margin: auto;
+}
+
+.search-btn {
+	background-color: #ffe81f;
+}
+
+@media only screen and (max-width: 740px) {
+	.search-bar {
+		width: 100%;
+	}
+}

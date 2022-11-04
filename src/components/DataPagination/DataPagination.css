@@ -1,0 +1,15 @@
+.page-btn {
+	width: 150px;
+}
+
+@media only screen and (max-width: 740px) {
+	.page-btn {
+		width: 100px;
+	}
+	.page-btn-inner {
+		display: none;
+	}
+	.page-btn-inner.active {
+		display: block;
+	}
+}

@@ -1,15 +1,17 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-export default function DataTable(props) {
-	const charElements = props.isLoading ? (
+import "./DataTable.css";
+
+export default function DataTable({ isLoading, chars }) {
+	const charElements = isLoading ? (
 		<tr>
 			<td className="data-placeholder" colSpan="6">
 				Loading...
 			</td>
 		</tr>
 	) : (
-		Object.values(props.chars).map((char) => {
+		Object.values(chars).map((char) => {
 			return (
 				<tr key={char.key}>
 					<td>{char.name}</td>

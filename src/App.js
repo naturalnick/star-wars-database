@@ -5,16 +5,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./assets/fonts/Starjhol.ttf";
 
-import SearchBar from "./components/SearchBar";
-import DataTable from "./components/DataTable";
-import DataPagination from "./components/DataPagination";
+import SearchBar from "./components/SearchBar/SearchBar";
+import DataTable from "./components/DataTable/DataTable";
+import DataPagination from "./components/DataPagination/DataPagination";
 
 function App() {
+	const url = {
+		pageable: `https://swapi.dev/api/people/?page=`,
+		searchable: `https://swapi.dev/api/people/?search=`,
+	};
+
+	const [isSearching, setIsSearching] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [data, setData] = useState({});
 
-	async function getData(url) {
+	async function getData(source) {
 		try {
-			const response = await axios.get(url);
+			const response = isNaN(source)
+				? await axios.get(url.searchable + source)
+				: await axios.get(url.pageable + source);
 			const data = response.data.results;
 			const characters = await Promise.all(
 				data.map(async (character) => {
@@ -43,33 +52,9 @@ function App() {
 
 	const [page, setPage] = useState({
 		active: 1,
-		url: `https://swapi.dev/api/people/?page=`,
 		isFirst: true,
 		isLast: false,
 	});
-
-	const [pageTotal, setPageTotal] = useState(0);
-
-	async function getPageInfo() {
-		let pageCount = 1;
-		let atTheEnd = false;
-		try {
-			while (!atTheEnd) {
-				const res1 = await axios.get(
-					`https://swapi.dev/api/people/?page=${pageCount}`
-				);
-				atTheEnd = res1.data.next === null ? true : false;
-				pageCount++;
-			}
-		} catch (error) {
-			console.log(error);
-		}
-		setPageTotal(pageCount - 1);
-	}
-
-	useEffect(() => {
-		getPageInfo();
-	}, []);
 
 	async function handlePageTurn(event) {
 		try {
@@ -81,9 +66,7 @@ function App() {
 			} else {
 				newActive = Number(buttonText);
 			}
-			const res1 = await axios.get(
-				`https://swapi.dev/api/people/?page=${newActive}`
-			);
+			const res1 = await axios.get(url.pageable + newActive);
 			setPage((prevPage) => {
 				return {
 					...prevPage,
@@ -99,46 +82,37 @@ function App() {
 		}
 	}
 
-	const [input, setInput] = useState("");
-
-	function handleChange(input) {
-		if (input === "") {
+	function handleSearch(text) {
+		if (text === "") {
 			cancelSearch();
 		} else {
-			performSearch(input);
+			performSearch(text);
 		}
-		setInput(input);
 	}
-
-	const [isSearching, setIsSearching] = useState(false);
-
-	const [isLoading, setIsLoading] = useState(true);
 
 	function cancelSearch() {
 		setIsSearching(false);
 		setIsLoading(true);
-		getData(page.url + page.active);
+		getData(page.active);
 	}
 
 	function performSearch(text) {
-		const url = `https://swapi.dev/api/people/?search=${text}`;
 		setIsSearching(true);
-		getData(url);
+		getData(text);
 	}
 
 	useEffect(() => {
-		getData(page.url + page.active);
+		getData(page.active);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page]);
-
-	console.log("render");
 
 	return (
 		<div className="App">
 			<h1>Star Wars Database</h1>
 			<SearchBar
-				value={input}
-				handleChange={handleChange}
+				handleSearch={handleSearch}
 				isLoading={isLoading}
+				cancelSearch={cancelSearch}
 			/>
 			<DataTable chars={data} isLoading={isLoading} />
 			<DataPagination
@@ -146,7 +120,7 @@ function App() {
 				isLoading={isLoading}
 				handlePageTurn={handlePageTurn}
 				page={page}
-				pageTotal={pageTotal}
+				url={url.pageable}
 			/>
 		</div>
 	);

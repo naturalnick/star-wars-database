@@ -1,0 +1,20 @@
+.table {
+	background-color: white;
+	margin-top: 15px;
+	text-align: left;
+}
+
+.table th,
+.table td {
+	padding-left: 15px;
+}
+
+.table-container {
+	overflow-x: auto;
+}
+
+.data-placeholder {
+	height: 410px;
+	text-align: center;
+	vertical-align: middle;
+}
