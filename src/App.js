@@ -10,39 +10,51 @@ import DataTable from "./components/DataTable/DataTable";
 import DataPagination from "./components/DataPagination/DataPagination";
 
 function App() {
+	const [isSearching, setIsSearching] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+
+	const [data, setData] = useState({});
+	const [page, setPage] = useState({
+		active: 1,
+		isFirst: true,
+		isLast: false,
+	});
+
+	useEffect(() => {
+		getData({ page: page.active });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [page.active]);
+
 	const url = {
 		pageable: `https://swapi.dev/api/people/?page=`,
 		searchable: `https://swapi.dev/api/people/?search=`,
 	};
 
-	const [isSearching, setIsSearching] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
-	const [data, setData] = useState({});
-
-	async function getData(source) {
+	async function getData({ query = "", page = undefined }) {
 		try {
-			const response = isNaN(source)
-				? await axios.get(url.searchable + source)
-				: await axios.get(url.pageable + source);
-			const data = response.data.results;
-			const characters = await Promise.all(
-				data.map(async (character) => {
-					const res1 = await axios.get(character.homeworld);
-					const homeworld = res1.data.name;
-					const res2 = await axios.get(character.species);
-					const species =
-						res2.data.name !== undefined ? res2.data.name : "Human";
+			let response;
+			if (query !== "") {
+				setIsSearching(true);
+				response = await axios.get(url.searchable + query);
+			} else if (page !== undefined) {
+				setIsLoading(true);
+				response = await axios.get(url.pageable + page);
+				setPage((prevPage) => {
 					return {
-						key: character.name,
-						name: character.name,
-						birth_year: character.birth_year,
-						height: character.height,
-						mass: character.mass,
-						homeworld: homeworld,
-						species: species,
+						...prevPage,
+						isFirst: response.data.previous === null ? true : false,
+						isLast: response.data.next === null ? true : false,
 					};
-				})
-			);
+				});
+			} else {
+				console.error("Incorrect parameters passed");
+			}
+			const characters = response.data.results;
+			for (const character of characters) {
+				character.key = character.name;
+				character.homeworld = await getHomeworld(character.homeworld);
+				character.species = await getSpecies(character.species);
+			}
 			setData(characters);
 			setIsLoading(false);
 		} catch (error) {
@@ -50,77 +62,44 @@ function App() {
 		}
 	}
 
-	const [page, setPage] = useState({
-		active: 1,
-		isFirst: true,
-		isLast: false,
-	});
-
-	async function handlePageTurn(event) {
-		try {
-			const buttonText = event.target.textContent;
-			let newActive;
-			if (!Number(buttonText)) {
-				newActive =
-					buttonText === "Next" ? page.active + 1 : page.active - 1;
-			} else {
-				newActive = Number(buttonText);
-			}
-			const res1 = await axios.get(url.pageable + newActive);
-			setPage((prevPage) => {
-				return {
-					...prevPage,
-					active: newActive,
-					isFirst: res1.data.previous === null ? true : false,
-					isLast: res1.data.next === null ? true : false,
-				};
-			});
-
-			setIsLoading(true);
-		} catch (error) {
-			console.log(error);
-		}
+	async function getHomeworld(url) {
+		return (await axios.get(url)).data.name;
 	}
 
-	function handleSearch(text) {
-		if (text === "") {
-			cancelSearch();
-		} else {
-			performSearch(text);
-		}
+	async function getSpecies(url) {
+		const response = await axios.get(url);
+		return response === undefined ? "Human" : response.data.name;
 	}
 
 	function cancelSearch() {
 		setIsSearching(false);
 		setIsLoading(true);
-		getData(page.active);
+		getData({ page: page.active });
 	}
 
-	function performSearch(text) {
-		setIsSearching(true);
-		getData(text);
+	function handlePageTurn(number) {
+		setPage((prevPage) => {
+			return {
+				...prevPage,
+				active: number,
+			};
+		});
 	}
-
-	useEffect(() => {
-		getData(page.active);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [page]);
 
 	return (
 		<div className="App">
 			<h1>Star Wars Database</h1>
 			<SearchBar
-				handleSearch={handleSearch}
+				getData={getData}
 				isLoading={isLoading}
 				cancelSearch={cancelSearch}
 			/>
 			<DataTable chars={data} isLoading={isLoading} />
 			<DataPagination
-				isSearching={isSearching}
-				isLoading={isLoading}
-				handlePageTurn={handlePageTurn}
 				page={page}
 				url={url.pageable}
+				isSearching={isSearching}
+				handlePageTurn={handlePageTurn}
 			/>
 		</div>
 	);

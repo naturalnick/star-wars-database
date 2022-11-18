@@ -6,45 +6,53 @@ import "./DataPagination.css";
 
 export default function DataPagination({
 	page,
-	isLoading,
 	isSearching,
 	handlePageTurn,
 	url,
 }) {
 	const pageTotal = usePageTotal(url);
+	const pageNumbers = getPageNumbers(pageTotal);
 
-	let items = [];
-	for (let number = 1; number <= pageTotal; number++) {
-		items.push(
-			<Button
-				className="page-btn-inner"
-				key={number}
-				active={number === page.active}
-				disabled={number === page.active || isLoading || isSearching}
-				onClick={(event) => handlePageTurn(event)}
-				variant="light"
-			>
-				{number}
-			</Button>
-		);
+	function getPageNumbers(numberOfPages) {
+		let pageArray = [];
+		for (let number = 1; number <= numberOfPages; number++) {
+			pageArray.push(
+				<Button
+					className="page-btn-inner"
+					key={number}
+					active={number === page.active}
+					disabled={number === page.active || isSearching}
+					onClick={() => handlePageTurn(number)}
+					variant="light"
+				>
+					{number}
+				</Button>
+			);
+		}
+		return pageArray;
 	}
+
 	return (
 		<div>
 			<ButtonGroup aria-label="pagination">
 				<Button
 					className="page-btn"
-					disabled={page.isFirst || isLoading || isSearching}
+					disabled={page.isFirst || isSearching}
 					variant="light"
-					onClick={(event) => handlePageTurn(event)}
+					onClick={() => {
+						!page.isFirst && handlePageTurn(page.active - 1);
+					}}
 				>
 					Previous
 				</Button>
-				{items}
+				{pageNumbers}
 				<Button
 					className="page-btn"
-					disabled={page.isLast || isLoading || isSearching}
+					disabled={page.isLast || isSearching}
 					variant="light"
-					onClick={(event) => handlePageTurn(event)}
+					onClick={() => {
+						!page.isLast && handlePageTurn(page.active + 1);
+					}}
 				>
 					Next
 				</Button>

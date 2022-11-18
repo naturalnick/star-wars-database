@@ -4,6 +4,10 @@ import axios from "axios";
 function usePageTotal(url) {
 	const [pageTotal, setPageTotal] = useState(0);
 
+	useEffect(() => {
+		getPageInfo();
+	}, []);
+
 	async function getPageInfo() {
 		let pageCount = 1;
 		let atTheEnd = false;
@@ -20,10 +24,6 @@ function usePageTotal(url) {
 		}
 		setPageTotal(pageCount - 1);
 	}
-
-	useEffect(() => {
-		getPageInfo();
-	}, []);
 
 	return pageTotal;
 }

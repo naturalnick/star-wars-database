@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
@@ -6,15 +6,19 @@ import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SearchBar.css";
 
-export default function SearchBar({ isLoading, handleSearch, cancelSearch }) {
+export default function SearchBar({ getData, isLoading, cancelSearch }) {
 	const [input, setInput] = useState("");
+	const inputRef = useRef(null);
 
 	function handleChange(e) {
 		setInput(e.target.value);
 		if (e.target.value === "") cancelSearch();
 	}
 
-	const inputRef = useRef(null);
+	function handleSearch() {
+		getData({ query: input });
+		focusSearchBar();
+	}
 
 	function focusSearchBar() {
 		inputRef.current.focus();
@@ -32,10 +36,7 @@ export default function SearchBar({ isLoading, handleSearch, cancelSearch }) {
 			/>
 			<Button
 				className="search-btn"
-				onClick={() => {
-					handleSearch(input);
-					focusSearchBar();
-				}}
+				onClick={handleSearch}
 				variant="warning"
 			>
 				Search
