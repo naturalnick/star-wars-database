@@ -68,7 +68,7 @@ function App() {
 
 	async function getSpecies(url) {
 		const response = await axios.get(url);
-		return response === undefined ? "Human" : response.data.name;
+		return response.data.name === undefined ? "Human" : response.data.name;
 	}
 
 	function cancelSearch() {
