@@ -6,7 +6,7 @@ _A web app that pulls Star Wars character data from [SWAPI](https://swapi.dev) (
 
 <br>
 
-See it in action [here](https://nicks-star-wars-data-app.herokuapp.com).
+See it in action [here](https://star-wars-chars.onrender.com).
 
 <br>
 
